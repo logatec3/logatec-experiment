@@ -209,6 +209,17 @@ def ZMQ_thread(input_q):
 
                 socketio.emit("info", message, broadcast=True)
 
+            elif msg[0] == "LOC":
+                z_log.info("received RSSI measurement")
+
+                response = {
+                    "sequence" : "loc",
+                    "device" : msg[1],
+                    "data" : msg[2]
+                }
+
+                socket.emit("localization", message, broadcast=True)
+
             # Received command response
             else:
                 z_log.info("Received message from broker!")

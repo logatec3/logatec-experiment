@@ -23,7 +23,8 @@
 
 		<!--script type="text/javascript" src="/static/js/script.js"></script>
 		<link href="{{ url_for('static',filename='css/main.css') }}" rel="stylesheet" type="text/css"-->
-		<script type="text/javascript" src="/controller/static/js/script.js"></script>
+		<script type="module" src="/controller/static/js/script.js"></script>
+		<script type="module" src="/controller/static/js/ble_localization.js"></script>
 		<link href="/controller/static/css/main.css" rel="stylesheet" type="text/css">
 
 		<link rel="icon" href="data:,">
@@ -193,6 +194,55 @@
 
 			</div>
 
+
+			<br>
+			<br>
+			<br>
+			<br>
+			<br>
+			<br>
+			<br>
+			<div class="well">
+                <div class="row">
+					<h2 style="text-align: center;">Real Time Bluetooth Localization</h2>
+					<div style="height: 500px; width: 720px; background-color: rgb(130, 122, 122); margin: 0 auto;">
+						<!--img src="/static/img/tloris.png" style="height: 100%; width: 100%; object-fit: contain;"-->
+						<img src="/controller/static/img/tloris.png" style="height: 100%; width: 100%; object-fit: contain;">
+
+						<span class="glyphicon glyphicon-map-marker node" id="node_1"></span>
+						<span class="glyphicon glyphicon-map-marker node" id="node_2"></span>
+						<span class="glyphicon glyphicon-map-marker node" id="node_3"></span>
+						<span class="glyphicon glyphicon-map-marker node" id="node_4"></span>
+						<span class="glyphicon glyphicon-map-marker node" id="node_5"></span>
+						<span class="glyphicon glyphicon-map-marker node" id="node_6"></span>
+						<span class="glyphicon glyphicon-map-marker node" id="node_7"></span>
+						<span class="glyphicon glyphicon-map-marker node" id="node_8"></span>
+						<span class="glyphicon glyphicon-map-marker node" id="node_9"></span>
+						<span class="glyphicon glyphicon-map-marker node" id="node_10"></span>
+
+						<span class="glyphicon glyphicon-map-marker node" id="node_11"></span>
+						<span class="glyphicon glyphicon-map-marker node" id="node_12"></span>
+						<span class="glyphicon glyphicon-map-marker node" id="node_13"></span>
+						<span class="glyphicon glyphicon-map-marker node" id="node_14"></span>
+						<span class="glyphicon glyphicon-map-marker node" id="node_15"></span>
+						<span class="glyphicon glyphicon-map-marker node" id="node_16"></span>
+						<span class="glyphicon glyphicon-map-marker node" id="node_17"></span>
+						<span class="glyphicon glyphicon-map-marker node" id="node_18"></span>
+						<span class="glyphicon glyphicon-map-marker node" id="node_19"></span>
+
+						<span class="glyphicon glyphicon-map-marker node" id="node_20"></span>
+						<span class="glyphicon glyphicon-map-marker node" id="node_21"></span>
+						<span class="glyphicon glyphicon-map-marker node" id="node_22"></span>
+						<span class="glyphicon glyphicon-map-marker node" id="node_23"></span>
+						<span class="glyphicon glyphicon-map-marker node" id="node_24"></span>
+						<span class="glyphicon glyphicon-map-marker node" id="node_25"></span>
+						<span class="glyphicon glyphicon-map-marker node" id="node_26"></span>
+						<span class="glyphicon glyphicon-map-marker node" id="node_27"></span>
+
+						<span class="glyphicon glyphicon-map-marker node" id="phone" style="color:aqua"></span>
+					</div>
+				</div>
+			</div>
 		</div>
 		
 		<footer> 

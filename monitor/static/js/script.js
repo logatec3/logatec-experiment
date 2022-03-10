@@ -26,6 +26,42 @@ var EXPERIMENT_COMMANDS = [
     "ROOT"
 ];
 
+// ------------------------------------------------------------------------------------------------------------
+// Localization module
+// ------------------------------------------------------------------------------------------------------------
+import ble_localization ,{rssi_queue} from "./ble_localization.js"
+
+var ble_math = new ble_localization();
+var ble_q = new rssi_queue();
+
+// Period of location display (in ms)
+var BLE_INTERVAL = 500;
+
+function displayBleLocation() {
+    console.log("Displaying location.");
+
+    // Get measurements from Q
+    var rssi_measurements = ble_q.getAllMeasurements();
+    var enabled_nodes = ble_q.getActiveDevices();
+
+    // If there is are new measurements (from at least 2 nodes)
+    let m = rssi_measurements.filter(v => v > 0)
+    if (m.length > 1){
+        // Math
+        var distances = ble_math.RSSI_to_distance(rssi_measurements);
+        var locations = ble_math.weights_to_locations(enabled_nodes);
+        let x = locations[0];
+        let y = locations[1];
+        var position = ble_math.WLS_localization(x, y, enabled_nodes, distances);
+        // Display
+        console.log("Location: " + position);
+        $("#phone").css("top", position[0]+"px");
+        $("#phone").css("left", position[1]+"px");
+    }
+    else{
+        console.log("No active measurements")
+    }
+}
 
 // ------------------------------------------------------------------------------------------------------------
 // Testbed tloris animation
@@ -290,7 +326,7 @@ function experiment_stopped(){
 // Document ready
 // ------------------------------------------------------------------------------------------------------------
 $(document).ready(function(){
-  
+    var bleExecution;
     var tloris = new Nodes();
     var dropdown = new Dropdown_menu();
 
@@ -333,6 +369,9 @@ $(document).ready(function(){
     socket.on("experiment started", function(msg){
         console.log("Experiment has just started!");
 
+        // Every BLE_INTERVAL update localization
+        bleExecution = setInterval(displayBleLocation(), BLE_INTERVAL);
+
         experiment_started(msg.data);
         socket.emit("testbed update");
     });
@@ -344,6 +383,9 @@ $(document).ready(function(){
 
         dropdown.remove_all();
         alert("Experiment stopped!")
+
+        // Stop the BLE localization
+        clearInterval(bleExecution);
     });
 
     socket.on("command response", function(msg){
@@ -416,6 +458,12 @@ $(document).ready(function(){
             dropdown.add_dev(lgtc.address);
             available_devices.push(lgtc.address);
         }
+    });
+
+    // store a BLE measurement for localization into a RSSI Q
+    socket.on("localization", function(msg){
+        console.log("Received BLE RSSI");
+        ble_q.putMeasurement(msg.device, msg.data);
     });
 
     // --------------------------------------------------------------------------------------------------------
