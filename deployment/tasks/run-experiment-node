@@ -31,7 +31,7 @@ cd /root/logatec-experiment/applications/$APP_LOC
 make $APP_NAME.logatec3 -j2
 
 # Start the Serial Monitor script
-cd /root/logatec-experiment/deployment/task
+cd /root/logatec-experiment/deployment/tasks
 python3 vesna_serial_monitor.py -o "node_${IPADDR}.txt"
 
 # ----------------------------------------------------------------------------------------------------------
