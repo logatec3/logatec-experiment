@@ -54,46 +54,42 @@ if __name__ == "__main__" :
 
     _get_id = True
 
-    try:
-        while(True):
+    
+    while(True):
             
-            try:
-                # Get line from the serial process
-                if not q_uwb.empty():
-                    line = q_uwb.get()
+        # Get line from the serial process
+        if not q_uwb.empty():
+            line = q_uwb.get()
 
-                    # Store each received line in to the logger text output
-                    logging.info(line)
+            # Store each received line in to the logger text output
+            logging.info(line)
 
-                    # Store _DATA measurements into a file
-                    if(line[0] == "_" and line[1] == "D" and line[2] == "A"):
-                        file.write("[" + str(datetime.now().time())+"] > ")
-                        file.write(line)
-                        file.write("\n")
+            # Store _DATA measurements into a file
+            if(len(line) > 2):
+                if(line[0] == "_" and line[1] == "D" and line[2] == "A"):
+                    file.write("[" + str(datetime.now().time())+"] > ")
+                    file.write(line)
+                    file.write("\n")
 
-                    # Store the ID of the device in a file 
-                    elif(line[0] == "I" and line[1] == "D"):
-                        _get_id = False
-                        file.write("[" + str(datetime.now().time())+"] Found Device ")
-                        file.write(line)
-                        file.write("\n")
+                # Store the ID of the device in a file 
+                elif(line[0] == "I" and line[1] == "D"):
+                    _get_id = False
+                    file.write("[" + str(datetime.now().time())+"] Found Device ")
+                    file.write(line)
+                    file.write("\n")
 
-            except Exception as e:
-                if type(e) == multiprocessing.Queue.Empty:
-                    log.debug("Empty Q")
-                    pass
-                else:
-                    log.exception("Exception")
 
-            # Temp solution for time measuring
-            if((timer() - _start_time) > (APP_DUR * 60) ):
-                log.info("Application time (" + str(APP_DUR) + ") elapsed ...")
-                break
+        # Temp solution for time measuring
+        if((timer() - _start_time) > (APP_DUR * 60) ):
+            log.info("Application time (" + str(APP_DUR) + ") elapsed ...")
+            break
 
-            if _get_id:
-                p_uart.sendNodeIDRequest()
-    except:
-        log.debug("Exiting main process")
+        if _get_id:
+            # TODO: not so clean solution --> this is called multiple times before UWB responds
+            p_uart.sendNodeIDRequest()
+    
+
+
 
     file.close()
     p_uart.close()
