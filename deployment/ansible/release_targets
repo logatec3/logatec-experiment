@@ -15,12 +15,14 @@ if [ "${usecfg}" = "True" ]; then
     a=$(get_conf application)
     d=$(get_conf duration)
     o=$(get_conf option)
+    m=$(get_conf master)
 
     if [ "$h" != "_UNDEF_" ] || [ "$a" != "_UNDEF_" ] || [ "$d" != "_UNDEF_" ] || [ "$o" != "_UNDEF_" ]; then
         sed -i "s/hosts:.*/hosts: ${h}:\&sna-lgtc-192-168-12/g" $ANSIBLE_PLAYBOOK
         sed -i "s/application:.*/application: ${a}/g" $ANSIBLE_PLAYBOOK
         sed -i "s/duration:.*/duration: ${d}/g" $ANSIBLE_PLAYBOOK
         sed -i "s/option:.*/option: ${o}/g" $ANSIBLE_PLAYBOOK
+        sed -i "s/master_node:.*/master_node: ${m}/g" $ANSIBLE_PLAYBOOK
     fi
 fi
 
