@@ -23,6 +23,7 @@ if [ "${usecfg}" = "True" ]; then
     else
         echo "Skipping collect_results from controller via tags option"
         ansible-playbook -f 50 -i deployment/ansible/inventory/logatec_testbed -i /etc/ansible/hosts --skip-tags "controller" $ANSIBLE_PLAYBOOK
+    fi
 else
     ansible-playbook -f 50 -i deployment/ansible/inventory/logatec_testbed -i /etc/ansible/hosts $ANSIBLE_PLAYBOOK
 fi
