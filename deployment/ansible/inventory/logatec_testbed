@@ -11,13 +11,13 @@
 [LPWA]
 192.168.12.[111:114]
 
-[UWB_outdor]
+[UWB_outodor]
 192.168.12.[141:151]
 
-[UWB_indor_1]
+[UWB_indoor_1]
 192.168.12.[152:163]
 
-[UWB_indor_2]
+[UWB_indoor_2]
 192.168.12.[164:171]
 
 [SRDB_template]
