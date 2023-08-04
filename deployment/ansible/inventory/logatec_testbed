@@ -11,7 +11,7 @@
 [LPWA]
 192.168.12.[111:114]
 
-[UWB_outodor]
+[UWB_outdoor]
 192.168.12.[141:151]
 
 [UWB_indoor_1]
