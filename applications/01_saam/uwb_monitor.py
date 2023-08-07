@@ -59,9 +59,10 @@ if __name__ == "__main__" :
             if not q_uwb.empty():
                 line = q_uwb.get()
                 file.write(line)
-                frame = uwb_parser.parse(line)
-                file.write(frame.type())
                 file.write("\n")
+                
+                frame = uwb_parser.parse(line)
+                log.info(frame.type())
 
                 if(line[0] == "I" and line[1] == "D"):
                     _get_id = False
