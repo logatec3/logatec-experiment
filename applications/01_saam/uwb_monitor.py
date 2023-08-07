@@ -2,6 +2,7 @@ import logging
 import sys, os
 import multiprocessing
 import Queue
+from datetime import datetime
 from timeit import default_timer as timer
 
 import lib.uwb_device as uwb_device
@@ -36,7 +37,9 @@ log = logging.getLogger("Monitor")
 log.setLevel(LOG_LEVEL)   
 
 file = open(RESULTS_FILENAME, mode="a+")
-file.write("Start")
+file.write("----------------------------------------------------------------------------------------------- \n")
+file.write(" Measurements made on: " + str(datetime.now())+ "\n")
+file.write("----------------------------------------------------------------------------------------------- \n")
 
 if __name__ == "__main__" :
 
@@ -58,9 +61,10 @@ if __name__ == "__main__" :
             # Get line from the serial process
             if not q_uwb.empty():
                 line = q_uwb.get()
+                file.write("[" + str(datetime.now().time())+"] > ")
                 file.write(line)
                 file.write("\n")
-                
+
                 frame = uwb_parser.parse(line)
                 log.info(frame.type())
 
