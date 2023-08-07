@@ -1,6 +1,7 @@
 import logging
 import sys, os
 import multiprocessing
+import Queue
 from timeit import default_timer as timer
 
 import lib.uwb_device as uwb_device
@@ -51,42 +52,39 @@ if __name__ == "__main__" :
 
     _get_id = True
 
-    try:
-        while(True):
-            
-            try:
-                # Get line from the serial process
-                if not q_uwb.empty():
-                    line = q_uwb.get()
-                    file.write(line)
-                    frame = uwb_parser.parse(line)
-                    file.write(frame.type())
-                    file.write("\n")
+    while(True):
+        
+        try:
+            # Get line from the serial process
+            if not q_uwb.empty():
+                line = q_uwb.get()
+                file.write(line)
+                frame = uwb_parser.parse(line)
+                file.write(frame.type())
+                file.write("\n")
 
-                    if(line[0] == "I" and line[1] == "D"):
-                        _get_id = False
-                    
-                    #if (frame.type() == "ActiveDevices"):
-                    #    file.write("Devices table: ")
-                    #    for d in frame.devices():
-                    #        file.write(d)
+                if(line[0] == "I" and line[1] == "D"):
+                    _get_id = False
+                
+                #if (frame.type() == "ActiveDevices"):
+                #    file.write("Devices table: ")
+                #    for d in frame.devices():
+                #        file.write(d)
 
-            except Exception as e:
-                if type(e) == multiprocessing.Queue.Empty:
-                    log.debug("Empty Q")
-                    pass
-                else:
-                    log.exception("Exception")
+        except Exception as e:
+            if type(e) == Queue.Empty:
+                log.debug("Empty Q")
+            else:
+                log.exception("Exception")
+            pass
 
-            # Temp solution for time measuring
-            if((timer() - _start_time) > (APP_DUR * 60) ):
-                log.info("Application time (" + str(APP_DUR) + ") elapsed ...")
-                break
+        # Temp solution for time measuring
+        if((timer() - _start_time) > (APP_DUR * 60) ):
+            log.info("Application time (" + str(APP_DUR) + ") elapsed ...")
+            break
 
-            if _get_id:
-                p_uart.sendNodeIDRequest()
-    except:
-        log.debug("Exiting main process")
+        if _get_id:
+            p_uart.sendNodeIDRequest()
 
     file.close()
     p_uart.close()

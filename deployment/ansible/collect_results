@@ -16,7 +16,16 @@ if [ "${usecfg}" = "True" ]; then
     if [ "$h" != "_UNDEF_" ]; then
         sed -i "0,/hosts:.*/{s/hosts:.*/hosts: ${h}:\&sna-lgtc-192-168-12/g}" $ANSIBLE_PLAYBOOK
     fi
+
+    o=$(get_conf option)
+    if [ "$o" != "_UNDEF_" ] && [ "$o" == "monitor" ]; then
+        ansible-playbook -f 50 -i deployment/ansible/inventory/logatec_testbed -i /etc/ansible/hosts $ANSIBLE_PLAYBOOK
+    else
+        echo "Skipping collect_results from controller via tags option"
+        ansible-playbook -f 50 -i deployment/ansible/inventory/logatec_testbed -i /etc/ansible/hosts --skip-tags "controller" $ANSIBLE_PLAYBOOK
+    fi
+else
+    ansible-playbook -f 50 -i deployment/ansible/inventory/logatec_testbed -i /etc/ansible/hosts $ANSIBLE_PLAYBOOK
 fi
 
 
-ansible-playbook -f 50 -i deployment/ansible/inventory/logatec_testbed -i /etc/ansible/hosts $ANSIBLE_PLAYBOOK
