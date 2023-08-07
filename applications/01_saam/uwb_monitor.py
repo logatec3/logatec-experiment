@@ -1,7 +1,6 @@
 import logging
 import sys, os
 import multiprocessing
-import Queue
 from datetime import datetime
 from timeit import default_timer as timer
 
@@ -78,10 +77,7 @@ if __name__ == "__main__" :
                 #        file.write(d)
 
         except Exception as e:
-            if type(e) == Queue.Empty:
-                log.debug("Empty Q")
-            else:
-                log.exception("Exception")
+            log.exception("Exception --> probably empty Queue")
             pass
 
         # Temp solution for time measuring
