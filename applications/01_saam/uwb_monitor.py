@@ -68,8 +68,9 @@ if __name__ == "__main__" :
                 frame = uwb_parser.parse(line)
                 log.info(frame.type())
 
-                if(line[0] == "I" and line[1] == "D"):
-                    _get_id = False
+                if(len(line) > 2):
+                    if(line[0] == "I" and line[1] == "D"):
+                        _get_id = False
                 
                 #if (frame.type() == "ActiveDevices"):
                 #    file.write("Devices table: ")
