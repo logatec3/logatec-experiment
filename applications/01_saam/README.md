@@ -7,5 +7,5 @@ SAAM application ...
 
 ## BIN
 
-Binaries from saam app.
+Binaries from saam app. (master = anchor-master, slave = anchor-slave)
 Device table size extended to 12.
