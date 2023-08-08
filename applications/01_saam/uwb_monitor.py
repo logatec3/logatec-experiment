@@ -68,7 +68,7 @@ if __name__ == "__main__" :
         try:
             if not q_uwb.empty():
                 line = q_uwb.get()
-                if 0 <= response[1].find(b'AT+SETUP:OK'):
+                if line.find('AT+SETUP:OK'):
                     log.info("AT+SETUP:OK")
                     break
         except:
@@ -81,7 +81,7 @@ if __name__ == "__main__" :
         try:
             if not q_uwb.empty():
                 line = q_uwb.get()
-                if 0 <= response[1].find(b'AT+START:OK'):
+                if line.find("AT+START:OK"):
                     log.info("AT+START:OK")
                     break
                 else:
