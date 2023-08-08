@@ -54,6 +54,8 @@ if __name__ == "__main__" :
 
     _get_id = True
 
+    p_uart.sendSTART()
+
     while(True):
         
         try:
