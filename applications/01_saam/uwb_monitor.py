@@ -55,25 +55,25 @@ if __name__ == "__main__" :
     _get_id = True
 
 
-    settings = {'channel': 2, 'prfr': 64, 'datarate': 110, 'plen': 1024, 'pcode': 9,
+    settings = {'device_mode': 'anchor', 'channel': 2, 'prfr': 64, 'datarate': 110, 'plen': 1024, 'pcode': 9,
                 'pacsize': 32, 'nssfd': True, 'cir': True, 'sfdto': 1057, 'rfpow': 50}
 
 
 
 
     ###############################################################3
-    log.info("Sending SETUP settings")
-    p_uart.sendSettings(settings)
-    while(True):
-        try:
-            if not q_uwb.empty():
-                line = q_uwb.get()
-                if line.find('AT+SETUP:OK'):
-                    log.info("AT+SETUP:OK")
-                    break
-        except:
-            log.debug("Exception in SETUP")
-            pass
+    # log.info("Sending SETUP settings")
+    # p_uart.sendSettings(settings)
+    # while(True):
+    #     try:
+    #         if not q_uwb.empty():
+    #             line = q_uwb.get()
+    #             if line.find('AT+SETUP:OK')>0:
+    #                 log.info("AT+SETUP:OK")
+    #                 break
+    #     except:
+    #         log.debug("Exception in SETUP")
+    #         pass
     ###############################################################
     log.info("Sending START command")
     p_uart.sendSTART()
@@ -81,11 +81,12 @@ if __name__ == "__main__" :
         try:
             if not q_uwb.empty():
                 line = q_uwb.get()
-                if line.find("AT+START:OK"):
+                if line.find("AT+START:OK")>0:
                     log.info("AT+START:OK")
                     break
                 else:
                     p_uart.sendSTART()
+                    break
         except:
             log.debug("Exception in START")
             pass
