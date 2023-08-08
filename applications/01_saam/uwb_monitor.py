@@ -54,7 +54,43 @@ if __name__ == "__main__" :
 
     _get_id = True
 
+
+    settings = {'channel': 2, 'prfr': 64, 'datarate': 110, 'plen': 1024, 'pcode': 9,
+                'pacsize': 32, 'nssfd': True, 'cir': True, 'sfdto': 1057, 'rfpow': 50}
+
+
+
+
+    ###############################################################3
+    log.info("Sending SETUP settings")
+    p_uart.sendSettings(settings)
+    while(True):
+        try:
+            if not q_uwb.empty():
+                line = q_uwb.get()
+                if 0 <= response[1].find(b'AT+SETUP:OK'):
+                    log.info("AT+SETUP:OK")
+                    break
+        except:
+            log.debug("Exception in SETUP")
+            pass
+    ###############################################################
+    log.info("Sending START command")
     p_uart.sendSTART()
+    while(True):
+        try:
+            if not q_uwb.empty():
+                line = q_uwb.get()
+                if 0 <= response[1].find(b'AT+START:OK'):
+                    log.info("AT+START:OK")
+                    break
+                else:
+                    p_uart.sendSTART()
+        except:
+            log.debug("Exception in START")
+            pass
+    ###############################################################
+
 
     while(True):
         
