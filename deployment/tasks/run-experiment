@@ -32,13 +32,26 @@ mv *.log /root/logatec-experiment/results/
 # ----------------------------------------------------------------------------------------------------------
 # Start the experiment application (storing the results into file with IPADDR in its name)
 # ----------------------------------------------------------------------------------------------------------
+
+
+
+
 # Wait untill the experiment is done - sleep for defined perion of experiment duration
-sleep ${APP_DUR}m
+#sleep ${APP_DUR}m
 
 # Get device ID
+#cd "/root/logatec-experiment/applications/${APP_LOC}"
+#python3 uwb_getid.py $IPADDR
+#mv *.txt /root/logatec-experiment/results/
+
+
+#----- Run serial monitor on each device
 cd "/root/logatec-experiment/applications/${APP_LOC}"
-python3 uwb_getid.py $IPADDR
+python3 uwb_monitor.py $IPADDR $APP_DUR
 mv *.txt /root/logatec-experiment/results/
+mv *.log /root/logatec-experiment/results/
+#----- Run serial monitor on each device
+
 
 # ----------------------------------------------------------------------------------------------------------
 # Cleanup - Put UWB into reset state so it doesnt interfeer with other experiments
