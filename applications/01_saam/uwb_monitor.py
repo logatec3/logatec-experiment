@@ -1,7 +1,7 @@
 import logging
 import sys, os
 import multiprocessing
-import Queue
+from datetime import datetime
 from timeit import default_timer as timer
 
 import lib.uwb_device as uwb_device
@@ -36,7 +36,9 @@ log = logging.getLogger("Monitor")
 log.setLevel(LOG_LEVEL)   
 
 file = open(RESULTS_FILENAME, mode="a+")
-file.write("Start")
+file.write("----------------------------------------------------------------------------------------------- \n")
+file.write(" Measurements made on: " + str(datetime.now())+ "\n")
+file.write("----------------------------------------------------------------------------------------------- \n")
 
 if __name__ == "__main__" :
 
@@ -52,19 +54,61 @@ if __name__ == "__main__" :
 
     _get_id = True
 
+
+    settings = {'device_mode': 'anchor', 'channel': 2, 'prfr': 64, 'datarate': 110, 'plen': 1024, 'pcode': 9,
+                'pacsize': 32, 'nssfd': True, 'cir': True, 'sfdto': 1057, 'rfpow': 50}
+
+
+
+
+    ###############################################################3
+    # log.info("Sending SETUP settings")
+    # p_uart.sendSettings(settings)
+    # while(True):
+    #     try:
+    #         if not q_uwb.empty():
+    #             line = q_uwb.get()
+    #             if line.find('AT+SETUP:OK')>0:
+    #                 log.info("AT+SETUP:OK")
+    #                 break
+    #     except:
+    #         log.debug("Exception in SETUP")
+    #         pass
+    ###############################################################
+    log.info("Sending START command")
+    p_uart.sendSTART()
+    while(True):
+        try:
+            if not q_uwb.empty():
+                line = q_uwb.get()
+                if line.find("AT+START:OK")>0:
+                    log.info("AT+START:OK")
+                    break
+                else:
+                    p_uart.sendSTART()
+                    break
+        except:
+            log.debug("Exception in START")
+            pass
+    ###############################################################
+
+
     while(True):
         
         try:
             # Get line from the serial process
             if not q_uwb.empty():
                 line = q_uwb.get()
+                file.write("[" + str(datetime.now().time())+"] > ")
                 file.write(line)
-                frame = uwb_parser.parse(line)
-                file.write(frame.type())
                 file.write("\n")
 
-                if(line[0] == "I" and line[1] == "D"):
-                    _get_id = False
+                frame = uwb_parser.parse(line)
+                log.info(frame.type())
+
+                if(len(line) > 2):
+                    if(line[0] == "I" and line[1] == "D"):
+                        _get_id = False
                 
                 #if (frame.type() == "ActiveDevices"):
                 #    file.write("Devices table: ")
@@ -72,10 +116,7 @@ if __name__ == "__main__" :
                 #        file.write(d)
 
         except Exception as e:
-            if type(e) == Queue.Empty:
-                log.debug("Empty Q")
-            else:
-                log.exception("Exception")
+            log.exception("Exception --> probably empty Queue")
             pass
 
         # Temp solution for time measuring
